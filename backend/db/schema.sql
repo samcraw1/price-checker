@@ -14,3 +14,40 @@ CREATE TABLE listings_history (
     price NUMERIC NOT NULL,
     checked_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE notes (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE applications (
+    id SERIAL PRIMARY KEY,
+    company TEXT NOT NULL,
+    role TEXT NOT NULL,
+    status TEXT NOT NULL,
+    date_applied DATE NOT NULL,
+    last_updated TIMESTAMPTZ NOT NULL DEFAULT now(),
+    notes TEXT
+);
+
+CREATE TABLE projects (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    technologies TEXT[] NOT NULL DEFAULT '{}',
+    status TEXT NOT NULL,
+    repository TEXT,
+    deployment_url TEXT,
+    notes TEXT
+);
+
+CREATE TABLE videos (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Idea'
+        CHECK (status IN ('Idea', 'Planning', 'Recording', 'Editing', 'Scheduled', 'Published')),
+    notes TEXT
+);

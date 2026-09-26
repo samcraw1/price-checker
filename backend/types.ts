@@ -29,3 +29,151 @@ export function toListing(row: ListingRow): Listing {
         url: row.url,
     };
 }
+
+export type Note = {
+    id: number;
+    title: string;
+    body: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type NewNote = {
+    title: string;
+    body: string;
+}
+
+export type NoteRow = {
+    id: number;
+    title: string;
+    body: string;
+    created_at: string;
+    updated_at: string;
+};
+
+export function toNote(row: NoteRow): Note {
+    return {
+        id: row.id,
+        title: row.title,
+        body: row.body,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+    };
+}
+
+export type Application = {
+    id: number;
+    company: string;
+    role: string;
+    status: string;
+    dateApplied: string;
+    lastUpdated: string;
+    notes: string | null;
+}
+
+export type NewApplication = {
+    company: string;
+    role: string;
+    status: string;
+    dateApplied: string;
+    notes?: string;
+}
+
+export type ApplicationRow = {
+    id: number;
+    company: string;
+    role: string;
+    status: string;
+    date_applied: string;
+    last_updated: string;
+    notes: string | null;
+};
+
+export function toApplication(row: ApplicationRow): Application {
+    return {
+        id: row.id,
+        company: row.company,
+        role: row.role,
+        status: row.status,
+        dateApplied: row.date_applied,
+        lastUpdated: row.last_updated,
+        notes: row.notes,
+    };
+}
+
+export type Project = {
+    id: number;
+    title: string;
+    description: string;
+    technologies: string[];
+    status: string;
+    repository: string | null;
+    deploymentUrl: string | null;
+    notes: string | null;
+}
+
+export type NewProject = {
+    title: string;
+    description: string;
+    technologies: string[];
+    status: string;
+    repository?: string;
+    deploymentUrl?: string;
+    notes?: string;
+}
+
+export type ProjectRow = {
+    id: number;
+    title: string;
+    description: string;
+    technologies: string[];
+    status: string;
+    repository: string | null;
+    deployment_url: string | null;
+    notes: string | null;
+};
+
+export function toProject(row: ProjectRow): Project {
+    return {
+        id: row.id,
+        title: row.title,
+        description: row.description,
+        technologies: row.technologies,
+        status: row.status,
+        repository: row.repository,
+        deploymentUrl: row.deployment_url,
+        notes: row.notes,
+    };
+}
+
+export const VIDEO_STATUSES = ['Idea', 'Planning', 'Recording', 'Editing', 'Scheduled', 'Published'] as const;
+export type VideoStatus = typeof VIDEO_STATUSES[number];
+
+export type Video = {
+    id: number;
+    title: string;
+    status: VideoStatus;
+    notes: string | null;
+}
+
+export type NewVideo = {
+    title: string;
+    status?: VideoStatus;
+    notes?: string;
+}
+
+export type VideoRow = {
+    id: number;
+    title: string;
+    status: VideoStatus;
+    notes: string | null;
+};
+
+export function toVideo(row: VideoRow): Video {
+    return {
+        id: row.id,
+        title: row.title,
+        status: row.status,
+        notes: row.notes,
+    };
+}
