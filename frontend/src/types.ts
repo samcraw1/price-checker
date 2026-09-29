@@ -24,3 +24,81 @@ export type NewListing = {
   imageUrl: string
   priceHistory: number[]
 }
+
+export type Note = {
+  id: number
+  title: string
+  body: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type NewNote = {
+  title: string
+  body: string
+}
+
+export type Application = {
+  id: number
+  company: string
+  role: string
+  status: string
+  dateApplied: string
+  lastUpdated: string
+  notes: string | null
+}
+
+export type NewApplication = {
+  company: string
+  role: string
+  status: string
+  dateApplied: string
+  notes?: string
+}
+
+// Backend accepts any string for status — this is just a frontend
+// convenience list for the dropdown, not an enforced enum.
+export const APPLICATION_STATUSES = ['Applied', 'Interviewing', 'Offer', 'Rejected'] as const
+
+export type Project = {
+  id: number
+  title: string
+  description: string
+  technologies: string[]
+  status: string
+  repository: string | null
+  deploymentUrl: string | null
+  notes: string | null
+}
+
+export type NewProject = {
+  title: string
+  description: string
+  technologies: string[]
+  status: string
+  repository?: string
+  deploymentUrl?: string
+  notes?: string
+}
+
+// Backend accepts any string for status — this is just a frontend
+// convenience list for the dropdown, not an enforced enum.
+export const PROJECT_STATUSES = ['Idea', 'In progress', 'Paused', 'Completed', 'Archived'] as const
+
+// This list IS enforced by the backend (a CHECK constraint on the videos
+// table), so it must match backend/types.ts's VIDEO_STATUSES exactly.
+export const VIDEO_STATUSES = ['Idea', 'Planning', 'Recording', 'Editing', 'Scheduled', 'Published'] as const
+export type VideoStatus = (typeof VIDEO_STATUSES)[number]
+
+export type Video = {
+  id: number
+  title: string
+  status: VideoStatus
+  notes: string | null
+}
+
+export type NewVideo = {
+  title: string
+  status?: VideoStatus
+  notes?: string
+}
