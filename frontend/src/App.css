@@ -85,6 +85,15 @@
   }
 }
 
+.youtube-convert-form {
+  grid-template-columns: 1fr;
+}
+
+.youtube-convert-form input {
+  font-size: 15px;
+  padding: 10px 12px;
+}
+
 /* Feedback states */
 
 .feedback {
@@ -263,6 +272,110 @@
   color: #2fa84f;
   background: rgba(47, 168, 79, 0.12);
   border-color: rgba(47, 168, 79, 0.35);
+}
+
+/* YouTube conversion history */
+
+.youtube-history {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.youtube-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  font-size: 14px;
+}
+
+.youtube-chip-pending,
+.youtube-chip-processing {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.youtube-chip-failed {
+  border-color: rgba(229, 72, 77, 0.35);
+  background: rgba(229, 72, 77, 0.1);
+}
+
+.youtube-chip-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--text-h);
+  text-decoration: none;
+}
+
+.youtube-chip-label:hover {
+  text-decoration: underline;
+}
+
+.chip-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip-status-label {
+  font-size: 11px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.chip-status-failed {
+  color: #e5484d;
+}
+
+.chip-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 2px 5px;
+  border-radius: 999px;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+}
+
+.chip-download:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.chip-download:hover:not(:disabled) {
+  color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.chip-spinner {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--accent-border);
+  border-top-color: var(--accent);
+  animation: chip-spin 0.8s linear infinite;
+}
+
+@keyframes chip-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Confirm dialog */

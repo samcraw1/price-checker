@@ -24,3 +24,18 @@ export type NewListing = {
   imageUrl: string
   priceHistory: number[]
 }
+
+export type YoutubeConversionStatus = 'pending' | 'processing' | 'complete' | 'failed'
+
+export type YoutubeConversion = {
+  youtubeName: string
+  id: number
+  url: string
+  status: YoutubeConversionStatus
+  transcript: string | null
+  error: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+

@@ -1,4 +1,4 @@
-import type { Listing, HistoryEntry, NewListing } from './types'
+import type { Listing, HistoryEntry, NewListing, YoutubeConversion } from './types'
 
 const API_BASE = '/api/price-listings'
 
@@ -72,3 +72,32 @@ export function deleteListing(id: number): Promise<void> {
 export function checkListing(id: number): Promise<Listing> {
   return request(`${API_BASE}/${id}/check`, { method: 'POST' }, 'Could not check that listing’s price.')
 }
+
+export function convertYoutubeVideo(url: string): Promise<YoutubeConversion> {
+  return request(
+    '/api/youtube-convert',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    },
+    'Could not convert that YouTube video.'
+  )
+}
+
+export function fetchYoutubeConversionResult(id: number): Promise<YoutubeConversion> {
+  return request(
+    `/api/youtube-convert/${id}`,
+    undefined,
+    'Could not fetch the YouTube conversion result.'
+  )
+}
+
+export function fetchYoutubeConversions(): Promise<YoutubeConversion[]> {
+  return request(
+    '/api/youtube-convert',
+    undefined,
+    'Could not fetch YouTube conversions.'
+  )
+}
+
