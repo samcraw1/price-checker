@@ -51,3 +51,15 @@ CREATE TABLE videos (
         CHECK (status IN ('Idea', 'Planning', 'Recording', 'Editing', 'Scheduled', 'Published')),
     notes TEXT
 );
+
+CREATE TABLE youtube_conversions (
+    id SERIAL PRIMARY KEY,
+    youtube_name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'processing', 'complete', 'failed')),
+    transcript TEXT,
+    error TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

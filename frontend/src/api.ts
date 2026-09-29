@@ -10,6 +10,7 @@ import type {
   NewProject,
   Video,
   NewVideo,
+  YoutubeConversion,
 } from './types'
 
 const API_BASE = '/api/price-listings'
@@ -208,4 +209,32 @@ export function updateVideo(id: number, updates: Partial<NewVideo>): Promise<Vid
 
 export function deleteVideo(id: number): Promise<void> {
   return request(`/api/videos/${id}`, { method: 'DELETE' }, 'Could not delete that video.')
+}
+
+export function convertYoutubeVideo(url: string): Promise<YoutubeConversion> {
+  return request(
+    '/api/youtube-convert',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    },
+    'Could not convert that YouTube video.'
+  )
+}
+
+export function fetchYoutubeConversionResult(id: number): Promise<YoutubeConversion> {
+  return request(
+    `/api/youtube-convert/${id}`,
+    undefined,
+    'Could not fetch the YouTube conversion result.'
+  )
+}
+
+export function fetchYoutubeConversions(): Promise<YoutubeConversion[]> {
+  return request(
+    '/api/youtube-convert',
+    undefined,
+    'Could not fetch YouTube conversions.'
+  )
 }

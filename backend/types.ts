@@ -177,3 +177,43 @@ export function toVideo(row: VideoRow): Video {
         notes: row.notes,
     };
 }
+
+export const YOUTUBE_CONVERSION_STATUSES = ['pending', 'processing', 'complete', 'failed'] as const;
+
+export type YoutubeConversionStatus = typeof YOUTUBE_CONVERSION_STATUSES[number];
+
+export type YoutubeConversion = {
+    youtubeName: string;
+    id: number;
+    url: string;
+    status: YoutubeConversionStatus;
+    transcript: string | null;
+    error: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type YoutubeConversionRow = {
+    id: number;
+    youtube_name: string;
+    url:string;
+    status: YoutubeConversionStatus;
+    transcript: string | null;
+    error: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+
+export function toYoutubeConversion(row: YoutubeConversionRow): YoutubeConversion {
+    return {
+        youtubeName: row.youtube_name,
+        id: row.id,
+        url: row.url,
+        status: row.status,
+        transcript: row.transcript,
+        error: row.error,
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+    };
+}

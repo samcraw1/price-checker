@@ -8,6 +8,7 @@ import applicationsRouter from './routes/applications';
 import projectsRouter from './routes/projects';
 import videosRouter from './routes/videos';
 import { checkAllListings } from './services/priceCheck';
+import youtubeConvertRouter from './routes/youtube-covert';
 
 const app = express();
 
@@ -18,8 +19,9 @@ app.use('/api', notesRouter);
 app.use('/api', applicationsRouter);
 app.use('/api', projectsRouter);
 app.use('/api', videosRouter);
+app.use('/api', youtubeConvertRouter);
 
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const port = process.env.PORT ? Number(process.env.PORT) : 4001;
 const checkIntervalCron = process.env.CHECK_INTERVAL_CRON ?? '0 */6 * * *';
 
 cron.schedule(checkIntervalCron, async () => {
