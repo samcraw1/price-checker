@@ -9,6 +9,7 @@ import projectsRouter from './routes/projects';
 import videosRouter from './routes/videos';
 import { checkAllListings } from './services/priceCheck';
 import youtubeConvertRouter from './routes/youtube-covert';
+import googleApiRouter from './routes/googleapi';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/api', applicationsRouter);
 app.use('/api', projectsRouter);
 app.use('/api', videosRouter);
 app.use('/api', youtubeConvertRouter);
+app.use('/api', googleApiRouter);
 
 const port = process.env.PORT ? Number(process.env.PORT) : 4001;
 const checkIntervalCron = process.env.CHECK_INTERVAL_CRON ?? '0 */6 * * *';

@@ -1,3 +1,8 @@
+export type ErrorCodeForDebugging = {
+  code: 400 | 401 | 403 | 404 | 409 | 500;
+  message: string;
+};
+
 export type Product = {
     name: string;
     price: number;
@@ -217,3 +222,30 @@ export function toYoutubeConversion(row: YoutubeConversionRow): YoutubeConversio
         updatedAt: row.updated_at,
     };
 }
+
+export type Email = {
+  id: string;
+  sentFrom: string;
+  sentTo: string;
+  subject: string;
+  snippet: string;
+  body: string;
+  cc?: string;
+  bcc?: string;
+  attachments?: string[];
+  sentAt: string;
+  isRead?: boolean;
+};
+
+export type NewEmail = {
+  sentFrom: string;
+  sentTo: string;
+  subject: string;
+  body: string;
+  cc?: string;
+  bcc?: string;
+  attachments?: string[];
+  sentAt: string;
+};
+
+export type EmailStatus = 'sent' | 'draft' | 'failed';

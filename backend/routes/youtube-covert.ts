@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { fetchTranscript, toPlainText } from 'youtube-transcript-plus';
 import pool from '../db';
-import { YoutubeConversionRow, toYoutubeConversion } from '../types';
+import { YoutubeConversionRow, toYoutubeConversion, ErrorCodeForDebugging } from '../types';
 
 const router = Router();
 
@@ -35,8 +35,12 @@ router.post('/youtube-convert', async (request, response) => {
     const { url } = request.body as { url?: string };
 
     if (!url) {
-        response.status(400).send('Bad Request');
-        return;
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
+        return; 
     }
 
     
@@ -51,7 +55,11 @@ router.post('/youtube-convert', async (request, response) => {
         processConversion(conversion.id, url);
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -65,14 +73,22 @@ router.get('/youtube-convert/:id', async (request, response) => {
         );
 
         if (result.rows.length === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.json(toYoutubeConversion(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -84,8 +100,12 @@ router.get ("/youtube-convert", async (request, response) => {
         response.json(result.rows.map(toYoutubeConversion))
         
     } catch (error) {
-        console.error(error);
-        response.status(500).send('Internal Server Error');
+       console.error(error);
+       const body: ErrorCodeForDebugging = {
+           code: 500,
+           message: 'Internal Server Error'
+       };
+       response.status(body.code).json(body);
     }
 });
 

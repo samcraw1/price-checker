@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import pool from '../db';
-import { NewApplication, ApplicationRow, toApplication } from '../types';
+import { NewApplication, ApplicationRow, toApplication, ErrorCodeForDebugging } from '../types';
 
 const router = Router();
 
@@ -10,14 +10,22 @@ router.get('/applications', async (request, response) => {
         response.json(result.rows.map(toApplication));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
 router.post('/applications', async (request, response) => {
     const application = request.body as NewApplication;
     if (!application.company || !application.role || !application.status || !application.dateApplied) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -29,7 +37,11 @@ router.post('/applications', async (request, response) => {
         response.status(201).json(toApplication(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -55,7 +67,11 @@ router.put('/applications/:id', async (request, response) => {
     }
 
     if (fields.length === 0) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -69,14 +85,22 @@ router.put('/applications/:id', async (request, response) => {
         );
 
         if (result.rows.length === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.json(toApplication(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -87,14 +111,22 @@ router.delete('/applications/:id', async (request, response) => {
         const result = await pool.query('DELETE FROM applications WHERE id = $1', [id]);
 
         if (result.rowCount === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.status(204).send();
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 

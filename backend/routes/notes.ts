@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import pool from '../db';
-import { NewNote, NoteRow, toNote } from '../types';
+import { NewNote, NoteRow, toNote, ErrorCodeForDebugging } from '../types';
 
 const router = Router();
 
@@ -10,14 +10,22 @@ router.get('/notes', async (request, response) => {
         response.json(result.rows.map(toNote));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
 router.post('/notes', async (request, response) => {
     const note = request.body as NewNote;
     if (!note.title || !note.body) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -29,7 +37,11 @@ router.post('/notes', async (request, response) => {
         response.status(201).json(toNote(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -52,7 +64,11 @@ router.put('/notes/:id', async (request, response) => {
     }
 
     if (fields.length === 0) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -66,14 +82,22 @@ router.put('/notes/:id', async (request, response) => {
         );
 
         if (result.rows.length === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.json(toNote(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -84,14 +108,22 @@ router.delete('/notes/:id', async (request, response) => {
         const result = await pool.query('DELETE FROM notes WHERE id = $1', [id]);
 
         if (result.rowCount === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.status(204).send();
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 

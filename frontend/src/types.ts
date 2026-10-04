@@ -127,4 +127,10 @@ export type Email ={
   bcc?: string
   attachments?: string[]
   sentAt: string
+  isRead?: boolean
+}
+
+export type ErrorCodeForDebugging = {
+  code: 400 | 401 | 403 | 404 | 409 | 500
+  message: string
 }

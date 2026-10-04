@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import pool from '../db';
-import { Product, ListingRow, toListing } from '../types';
+import { Product, ListingRow, toListing, ErrorCodeForDebugging } from '../types';
 import { checkListing, ListingNotFoundError } from '../services/priceCheck';
 import { PriceNotFoundError } from '../scraper';
 
@@ -12,7 +12,11 @@ router.get('/price-listings', async (request, response) => {
         response.json(result.rows.map(toListing));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -27,14 +31,22 @@ router.get('/price-listings/:id/history', async (request, response) => {
         response.json(result.rows);
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
 router.post('/price-listings', async (request, response) => {
     const product = request.body as Product;
     if (!product.name || !product.price || !product.imageUrl || !product.priceHistory || !product.url) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -46,7 +58,11 @@ router.post('/price-listings', async (request, response) => {
         response.status(201).json(toListing(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -72,7 +88,11 @@ router.put('/price-listings/:id', async (request, response) => {
     }
 
     if (fields.length === 0) {
-        response.status(400).send('Bad Request');
+        const body: ErrorCodeForDebugging = {
+            code: 400,
+            message: 'Bad Request'
+        };
+        response.status(body.code).json(body);
         return;
     }
 
@@ -85,14 +105,22 @@ router.put('/price-listings/:id', async (request, response) => {
         );
 
         if (result.rows.length === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.json(toListing(result.rows[0]));
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -103,14 +131,22 @@ router.delete('/price-listings/:id', async (request, response) => {
         const result = await pool.query('DELETE FROM listings WHERE id = $1', [id]);
 
         if (result.rowCount === 0) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
 
         response.status(204).send();
     } catch (error) {
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
@@ -122,7 +158,11 @@ router.post('/price-listings/:id/check', async (request, response) => {
         response.json(listing);
     } catch (error) {
         if (error instanceof ListingNotFoundError) {
-            response.status(404).send('Not Found');
+            const body: ErrorCodeForDebugging = {
+                code: 404,
+                message: 'Not Found'
+            };
+            response.status(body.code).json(body);
             return;
         }
         if (error instanceof PriceNotFoundError) {
@@ -130,7 +170,11 @@ router.post('/price-listings/:id/check', async (request, response) => {
             return;
         }
         console.error(error);
-        response.status(500).send('Internal Server Error');
+        const body: ErrorCodeForDebugging = {
+            code: 500,
+            message: 'Internal Server Error'
+        };
+        response.status(body.code).json(body);
     }
 });
 
