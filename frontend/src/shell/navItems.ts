@@ -6,4 +6,5 @@ export const NAV_ITEMS = [
   { to: '/notes', label: 'Notes' },
   { to: '/price-tracker', label: 'Price Tracker' },
   { to: '/youtube-convert', label: 'YouTube Convert' },
+  { to: '/email', label: 'Email' },
 ]

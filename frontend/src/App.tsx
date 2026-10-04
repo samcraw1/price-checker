@@ -7,6 +7,7 @@ import { Videos } from './pages/Videos'
 import { YoutubeConvert } from './pages/YoutubeCovert'
 import { Notes } from './pages/Notes'
 import { PriceTracker } from './pages/PriceTracker'
+import { Email } from './pages/Email'
 import './App.css'
 import './shell/shell.css'
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/notes" element={<Notes />} />
         <Route path="/price-tracker" element={<PriceTracker />} />
         <Route path="/youtube-convert" element={<YoutubeConvert />} />
+        <Route path="/email" element={<Email />} />
       </Route>
     </Routes>
   )

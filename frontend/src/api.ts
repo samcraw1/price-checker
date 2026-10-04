@@ -238,3 +238,15 @@ export function fetchYoutubeConversions(): Promise<YoutubeConversion[]> {
     'Could not fetch YouTube conversions.'
   )
 }
+
+export function emailChecker(email: string): Promise<boolean> {
+  return request (
+    '/api/email-checker',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    },
+    'Could not check that email.'
+  )
+}

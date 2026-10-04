@@ -115,3 +115,28 @@ export type YoutubeConversion = {
   createdAt: string
   updatedAt: string
 }
+
+export type Email ={ 
+  id: string
+  sentFrom: string
+  sentTo: string
+  subject: string
+  body: string
+  cc?: string
+  bcc?: string
+  attachments?: string[]
+  sentAt: Date
+}
+
+export type NewEmail = {
+  sentFrom: string
+  sentTo: string
+  subject: string
+  body: string
+  cc?: string
+  bcc?: string
+  attachments?: string[]
+  sentAt: Date
+}
+
+export type EmailStatus = 'sent' | 'draft' | 'failed'
