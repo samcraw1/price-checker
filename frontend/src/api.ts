@@ -11,20 +11,21 @@ import type {
   Video,
   NewVideo,
   YoutubeConversion,
+  Email,
 } from './types'
 
 const API_BASE = '/api/price-listings'
 
 async function friendlyError(response: Response, fallback: string): Promise<Error> {
-  if (response.status === 404) return new Error('That listing no longer exists.')
+  if (response.status === 404) return new ApiError('That listing no longer exists.', 404)
   if (response.status === 502) {
     // The backend always sends a body with its own 502s (a PriceNotFoundError
     // message). An empty body means this 502 came from Vite's dev proxy
     // itself because it couldn't reach the backend at all.
     const body = await response.text().catch(() => '')
-    return new Error(body || 'Could not reach the server. Is the backend running?')
+    return new ApiError(body || 'Could not reach the server. Is the backend running?', 502)
   }
-  return new Error(fallback)
+  return new ApiError(fallback, response.status)
 }
 
 async function request<T>(input: string, init: RequestInit | undefined, fallback: string): Promise<T> {
@@ -239,14 +240,19 @@ export function fetchYoutubeConversions(): Promise<YoutubeConversion[]> {
   )
 }
 
-export function emailChecker(email: string): Promise<boolean> {
-  return request (
-    '/api/email-checker',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    },
-    'Could not check that email.'
-  )
+export class ApiError extends Error {
+  status: number
+  constructor(message:string, status: number) {
+    super(message)
+    this.status = status
+    this.name = 'ApiError'
+  }
+}
+
+export function fetchEmails(): Promise<Email[]> {
+  return request('/api/emails' , undefined, 'Could not fetch emails.')
+}
+
+export function fetchEmail(id: string): Promise<Email> {
+  return request(`/api/emails/${id}`, undefined, 'Could not fetch that email.')
 }

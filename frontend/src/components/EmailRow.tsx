@@ -16,6 +16,7 @@ export function EmailRow({ email, selected, onSelect }: EmailRowProps) {
       >
         <span className="email-row-from">{email.sentFrom}</span>
         <span className="email-row-subject">{email.subject}</span>
+        <span className="email-row-snippet">{email.snippet}</span>
         <span className="email-row-date">
           {new Date(email.sentAt).toLocaleDateString()}
         </span>

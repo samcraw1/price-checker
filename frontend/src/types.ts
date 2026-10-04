@@ -121,22 +121,10 @@ export type Email ={
   sentFrom: string
   sentTo: string
   subject: string
+  snippet: string
   body: string
   cc?: string
   bcc?: string
   attachments?: string[]
   sentAt: string
 }
-
-export type NewEmail = {
-  sentFrom: string
-  sentTo: string
-  subject: string
-  body: string
-  cc?: string
-  bcc?: string
-  attachments?: string[]
-  sentAt: string
-}
-
-export type EmailStatus = 'sent' | 'draft' | 'failed'

@@ -556,3 +556,29 @@
     border-bottom: 1px solid var(--border);
   }
 }
+
+.email-viewer-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.email-row-snippet {
+  grid-column: 1 / -1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85em;
+}
+
+.email-refresh {
+  margin: 0 8px 12px 0;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+}
