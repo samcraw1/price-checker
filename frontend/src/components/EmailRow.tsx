@@ -1,19 +1,25 @@
 import type { Email } from '../types'
 
+type EmailRowProps = {
+  email: Email
+  selected: boolean
+  onSelect: () => void
+}
 
-type EmailProps = {
-        email: Email
-        onSelect: () => void
-    }
-
-export function EmailRow({ email, onSelect }: EmailProps) {
-
-    return (
-        <div>
-            {/* Render email details here */}
-            <div onClick={onSelect}>
-                <strong>{email.sentFrom}</strong> - {email.subject}
-            </div>
-        </div>
-    )
+export function EmailRow({ email, selected, onSelect }: EmailRowProps) {
+  return (
+    <li>
+      <button
+        type="button"
+        className={`email-row${selected ? ' selected' : ''}`}
+        onClick={onSelect}
+      >
+        <span className="email-row-from">{email.sentFrom}</span>
+        <span className="email-row-subject">{email.subject}</span>
+        <span className="email-row-date">
+          {new Date(email.sentAt).toLocaleDateString()}
+        </span>
+      </button>
+    </li>
+  )
 }

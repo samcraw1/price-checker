@@ -125,7 +125,7 @@ export type Email ={
   cc?: string
   bcc?: string
   attachments?: string[]
-  sentAt: Date
+  sentAt: string
 }
 
 export type NewEmail = {
@@ -136,7 +136,7 @@ export type NewEmail = {
   cc?: string
   bcc?: string
   attachments?: string[]
-  sentAt: Date
+  sentAt: string
 }
 
 export type EmailStatus = 'sent' | 'draft' | 'failed'

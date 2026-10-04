@@ -2,19 +2,21 @@ import { useState } from 'react'
 import type { Email } from './types'
 import { EmailList } from './components/EmailList'
 import { EmailViewer } from './components/EmailViewer'
-
+import { ConnectGmailButton } from './components/ConnectGmailButton'
 
 export function EmailDashboard() {
+  const [emails] = useState<Email[]>([])
+  const [selectedId, setSelectedId] = useState<string | null>(null)
 
-    const [emails, setEmails] = useState<Email[]>([])
-    const [selectedId, setSelectedId] = useState<string | null>(null)
+  const selected = emails.find((e) => e.id === selectedId) ?? null
 
-    const selected = emails.find(e => e.id === selectedId) ?? null
-
-    return (
-        <div style = {{display: 'flex'}}>
-            <EmailList emails={emails} onSelect={setSelectedId} />
-            <EmailViewer email={selected} />
-        </div>
-    )
+  return (
+    <>
+      <ConnectGmailButton />
+      <div className="email-layout">
+        <EmailList emails={emails} selectedId={selectedId} onSelect={setSelectedId} />
+        <EmailViewer email={selected} onClose={() => setSelectedId(null)} />
+      </div>
+    </>
+  )
 }

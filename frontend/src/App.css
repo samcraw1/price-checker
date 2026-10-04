@@ -432,3 +432,127 @@
   background: #e5484d;
   border-color: #e5484d;
 }
+
+.email-connect {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  text-decoration: none;
+}
+
+.email-layout {
+  display: flex;
+  height: 70vh;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+}
+
+.email-list {
+  flex: 0 0 320px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+.email-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.email-row:hover {
+  background: var(--code-bg);
+}
+
+.email-row.selected {
+  background: var(--accent-bg);
+}
+
+.email-row-from {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.email-row-subject {
+  grid-column: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.email-row-date {
+  grid-row: 1;
+  grid-column: 2;
+  font-size: 0.8em;
+}
+
+.email-viewer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.email-viewer-empty {
+  align-items: center;
+  justify-content: center;
+}
+
+.email-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.email-viewer-header h2 {
+  margin: 0 0 8px;
+  color: var(--text-h);
+}
+
+.email-viewer-meta {
+  margin-bottom: 12px;
+  font-size: 0.85em;
+}
+
+.email-viewer iframe {
+  flex: 1;
+  min-height: 300px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+@media (max-width: 720px) {
+  .email-layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .email-list {
+    flex-basis: auto;
+    max-height: 40vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+}
