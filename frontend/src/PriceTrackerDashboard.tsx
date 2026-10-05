@@ -136,6 +136,7 @@ export function PriceTrackerDashboard() {
           {listings.map((listing) => (
             <ListingCard
               key={listing.id}
+              
               listing={listing}
               history={historyByListing[listing.id] ?? []}
               expanded={expandedId === listing.id}

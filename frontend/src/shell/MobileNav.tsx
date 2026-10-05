@@ -7,7 +7,7 @@ export function MobileNav() {
   return (
     <div className="mobile-nav">
       <div className="mobile-nav-bar">
-        <span className="sidebar-brand">Personal</span>
+        <span className="sidebar-brand">Sidebar</span>
         <button
           type="button"
           className="mobile-nav-toggle"
