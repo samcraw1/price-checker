@@ -25,6 +25,28 @@ function extractBody(part?: gmail_v1.Schema$MessagePart): string | null {
     return find(part, 'text/html') ?? find(part, 'text/plain') ?? (part.body?.data ? decode(part.body.data) : null);
 }
 
+const header = (msg: gmail_v1.Schema$Message, name: string) =>
+    msg.payload?.headers?.find((h) => h.name?.toLowerCase() === name.toLowerCase())?.value ?? undefined;
+
+// Gmail message -> the Email shape the frontend expects.
+function toEmail(msg: gmail_v1.Schema$Message, body: string) {
+    const isHtml = /<[a-z][\s\S]*>/i.test(body);
+    const safeBody = isHtml || !body
+        ? body
+        : `<pre style="white-space:pre-wrap;font-family:sans-serif">${body.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</pre>`;
+    return {
+        id: msg.id ?? '',
+        sentFrom: header(msg, 'From') ?? '',
+        sentTo: header(msg, 'To') ?? '',
+        cc: header(msg, 'Cc'),
+        subject: header(msg, 'Subject') ?? '(no subject)',
+        snippet: msg.snippet ?? '',
+        body: safeBody,
+        sentAt: new Date(Number(msg.internalDate ?? Date.now())).toISOString(),
+        isRead: !(msg.labelIds ?? []).includes('UNREAD'),
+    };
+}
+
 function getClientCredentials() {
     const client = new google.auth.OAuth2(
         process.env.GOOGLE_CLIENT_ID,
@@ -73,7 +95,7 @@ googleApiRouter.get('/auth/google/callback', async (request, response) => {
         const client = getClientCredentials();
         const { tokens } = await client.getToken(code as string);
         savedTokens = tokens;
-        response.redirect('http://localhost:5177/email');
+        response.redirect('http://localhost:5173/email');
     } catch (error) {
         response.status(400).json({ error: "token exchange failed" });
     }
@@ -93,9 +115,19 @@ googleApiRouter.get('/emails', async (request, response) => {
     }
     try {
         const gmail = google.gmail({ version: 'v1', auth: getClientCredentials() });
-        const gmailList = await gmail.users.messages.list({ userId: 'me' });
-        const gmailUserId = await gmail.users.getProfile({ userId: 'me' });
-             response.json({ messages: gmailList.data.messages, userId: gmailUserId.data.emailAddress });
+        const gmailList = await gmail.users.messages.list({ userId: 'me', maxResults: 20 });
+        const messages = await Promise.all(
+            (gmailList.data.messages ?? []).map(async (m) => {
+                const full = await gmail.users.messages.get({
+                    userId: 'me',
+                    id: m.id!,
+                    format: 'metadata',
+                    metadataHeaders: ['From', 'To', 'Cc', 'Subject'],
+                });
+                return toEmail(full.data, '');
+            })
+        );
+        response.json(messages);
     } catch (error) {
         const body: ErrorCodeForDebugging = {
             code: 500,
@@ -117,9 +149,8 @@ googleApiRouter.get('/emails/:id', async (request, response) => {
 
     try{
         const gmail = google.gmail({ version: 'v1', auth: getClientCredentials() });
-        const gmailBody = await gmail.users.messages.get({ userId: 'me', id: request.params.id });
-        const decodedMessage = extractBody(gmailBody.data.payload);
-        response.json({ message: decodedMessage });
+        const gmailBody = await gmail.users.messages.get({ userId: 'me', id: request.params.id, format: 'full' });
+        response.json(toEmail(gmailBody.data, extractBody(gmailBody.data.payload) ?? ''));
     }catch(error){
         const allowedErrorCodes = [400, 401, 403, 404, 409, 500] as const;
         const statusCode = (error as { code?: number }).code;
